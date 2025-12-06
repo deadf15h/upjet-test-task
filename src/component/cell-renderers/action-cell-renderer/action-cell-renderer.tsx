@@ -1,7 +1,10 @@
 import { useState } from "react";
-import { deleteUserApi } from "../../api/api";
-import Button from "../button/button";
-import ConfirmationModalWindow from "../confirmation-modal-window/confirmation-modal-window";
+import { deleteUserApi, editUserApi } from "../../../api/api";
+import { TUser } from "../../../const/types";
+import EditUserForm from "../../add-user-form/edit-user-form";
+import Button from "../../button/button";
+import ConfirmationModalWindow from "../../confirmation-modal-window/confirmation-modal-window";
+import ModalWindow from "../../modal-window/modal-window";
 import "./action-cell-renderer.sass";
 
 const ActionCellRenderer = (props: any) => {
@@ -24,8 +27,18 @@ const ActionCellRenderer = (props: any) => {
     setDeleteUserModalOpen(false);
   };
 
-  const deleteUser = async (userId: string) => {
+  const handleDeleteUser = async (userId: string) => {
     await deleteUserApi(userId);
+  };
+
+  const handleEditUser = async (userId: string, newUserData: TUser) => {
+    await editUserApi(userId, newUserData);
+
+    setTimeout(() => {
+      props.onSubmit();
+    }, 500);
+
+    handleDeleteUserModalClose();
   };
 
   return (
@@ -37,17 +50,10 @@ const ActionCellRenderer = (props: any) => {
       </Button>
 
       <ConfirmationModalWindow
-        isOpen={isEditUserModalOpen}
-        title="Are you sure you want to delete user?"
-        onConfirm={() => {}}
-        onReject={handleEditUserModalClose}
-      />
-
-      <ConfirmationModalWindow
         isOpen={isDeleteUserModalOpen}
         title="Are you sure you want to delete user?"
         onConfirm={() => {
-          deleteUser(props.data.id);
+          handleDeleteUser(props.data.id);
 
           // Supabase does not measure user deletion
           setTimeout(() => {
@@ -58,6 +64,13 @@ const ActionCellRenderer = (props: any) => {
         }}
         onReject={handleDeleteUserModalClose}
       />
+
+      <ModalWindow
+        isOpen={isEditUserModalOpen}
+        onClose={handleEditUserModalClose}
+      >
+        <EditUserForm onSubmit={handleEditUser} user={props.data} />
+      </ModalWindow>
     </div>
   );
 };

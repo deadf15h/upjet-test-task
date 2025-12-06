@@ -45,3 +45,28 @@ export const deleteUserApi = async (userId: string) => {
 
   return null;
 };
+
+export const getAllUsersFullnameApi = async () => {
+  const { data, error } = await supabase.from("users").select("fullName, id");
+
+  if (!error) {
+    console.log("getAllUsersFullnameApi success");
+    return data;
+  }
+
+  return null;
+};
+
+export const editUserApi = async (userId: string, newUserData: TUser) => {
+  const { data, error } = await supabase
+    .from("users")
+    .update(newUserData)
+    .eq("id", userId);
+
+  if (!error) {
+    console.log("editUserApi success");
+    return data;
+  }
+
+  return null;
+};

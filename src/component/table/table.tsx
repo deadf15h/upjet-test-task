@@ -8,12 +8,13 @@ import { AgGridReact } from "ag-grid-react";
 import { createContext, useEffect, useState } from "react";
 import { gridOptions } from "../../const/const";
 import { TUser } from "../../const/types";
-import AddUserForm from "../add-user-form/add-user-form";
+import CreateUserForm from "../add-user-form/create-user-form";
 import Button from "../button/button";
 import ModalWindow from "../modal-window/modal-window";
 import { createUserApi, getUsersApi } from "../../api/api";
-import ActionCellRenderer from "../action-cell-renderer/action-cell-renderer";
+import ActionCellRenderer from "../cell-renderers/action-cell-renderer/action-cell-renderer";
 import "./table.sass";
+import TimeCellRenderer from "../cell-renderers/time-cell-renderer/time-cell-renderer";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -31,7 +32,7 @@ const Table = () => {
     }
   };
 
-  const handleAddUserModalOpen = () => {
+  const handleCreateUserModalOpen = () => {
     setAddUserModalOpen(true);
   };
 
@@ -39,7 +40,7 @@ const Table = () => {
     setAddUserModalOpen(false);
   };
 
-  const handleAddUser = async (newUser: TUser) => {
+  const handleCreateUser = async (newUser: TUser) => {
     await createUserApi(newUser);
 
     handleAddUserModalClose();
@@ -95,6 +96,7 @@ const Table = () => {
       field: "createdAt",
       sortable: true,
       filter: true,
+      cellRenderer: TimeCellRenderer,
     },
     {
       headerName: "Actions",
@@ -119,13 +121,13 @@ const Table = () => {
         gridOptions={gridOptions}
       />
 
-      <Button onClick={handleAddUserModalOpen}>Add new user</Button>
+      <Button onClick={handleCreateUserModalOpen}>Add new user</Button>
 
       <ModalWindow
         isOpen={isAddUserModalOpen}
         onClose={handleAddUserModalClose}
       >
-        <AddUserForm onSubmit={handleAddUser} />
+        <CreateUserForm onSubmit={handleCreateUser} />
       </ModalWindow>
     </div>
   );
