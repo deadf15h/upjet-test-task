@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import ReactDOM from "react-dom";
 import "./modal-window.sass";
 
 type Props = {
@@ -10,7 +11,9 @@ type Props = {
 const ModalWindow = ({ isOpen, onClose, children }: Props) => {
   if (!isOpen) return null;
 
-  return (
+  const modalRoot = document.getElementById("modal-root") || document.body;
+
+  return ReactDOM.createPortal(
     <div className="modal-window" onClick={onClose}>
       <div
         className="modal-window__content"
@@ -21,7 +24,8 @@ const ModalWindow = ({ isOpen, onClose, children }: Props) => {
         </div>
         {children}
       </div>
-    </div>
+    </div>,
+    modalRoot
   );
 };
 
