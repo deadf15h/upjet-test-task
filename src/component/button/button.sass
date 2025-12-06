@@ -2,11 +2,21 @@
 
 .button
     padding: 16px
+    display: flex
+    align-items: center
+    justify-content: center
     width: fit-content
+    height: 40px
     border-radius: 16px
     color: $white
-    background-color: $blue
+    box-sizing: border-box
     cursor: pointer
     &:hover
         transform: scale(1.05)
         transition-duration: .3s
+
+.blue
+    background-color: $blue
+
+.red
+    background-color: $red
