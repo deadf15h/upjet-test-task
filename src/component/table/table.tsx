@@ -15,6 +15,7 @@ import { createUserApi, getUsersApi } from "../../api/api";
 import ActionCellRenderer from "../cell-renderers/action-cell-renderer/action-cell-renderer";
 import "./table.sass";
 import TimeCellRenderer from "../cell-renderers/time-cell-renderer/time-cell-renderer";
+import SubordinateListCellRenderer from "../cell-renderers/subordinate-list-cell-renderer/subordinate-list-cell-renderer";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -40,8 +41,8 @@ const Table = () => {
     setAddUserModalOpen(false);
   };
 
-  const handleCreateUser = async (newUser: TUser) => {
-    await createUserApi(newUser);
+  const handleCreateUser = async (newUser: TUser, subordinateList: TUser[]) => {
+    await createUserApi(newUser, subordinateList);
 
     handleAddUserModalClose();
 
@@ -90,6 +91,7 @@ const Table = () => {
       field: "subordinateList",
       sortable: true,
       filter: true,
+      cellRenderer: SubordinateListCellRenderer,
     },
     {
       headerName: "Created at",

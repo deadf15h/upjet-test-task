@@ -1,6 +1,9 @@
 import { Field, Formik } from "formik";
-import { useEffect, useState } from "react";
-import { getAllUsersFullnameApi } from "../../api/api";
+import { useEffect, useRef, useState } from "react";
+import {
+  getAllUsersFullnameApi,
+  getPossibleSubordinatesApi,
+} from "../../api/api";
 import { EUserRole } from "../../const/const";
 import { userValidationSchema } from "../../const/userValidationSchema";
 import { TUser } from "../../const/types";
@@ -8,12 +11,14 @@ import Button from "../button/button";
 import "./user-form.sass";
 
 type Props = {
-  onSubmit: (newUser: TUser) => void;
+  onSubmit: (newUser: TUser, subordinateList: TUser[]) => void;
 };
 
 const CreateUserForm = ({ onSubmit }: Props) => {
   const [usersFullname, setUsersFullname] = useState<TUser[]>([]);
+  const [possibleSubordinates, setPossibleSubordinates] = useState<TUser[]>([]);
   const [userSubordinateList, setUserSubordinateList] = useState<TUser[]>([]);
+  const selectRef = useRef(null);
 
   const getUsersFullname = async () => {
     const res = await getAllUsersFullnameApi();
@@ -34,13 +39,41 @@ const CreateUserForm = ({ onSubmit }: Props) => {
     setUserSubordinateList([...userSubordinateList, user]);
   };
 
-  // TODO
   const handleRemoveSubordinate = (user: TUser) => {
-    setUserSubordinateList(userSubordinateList.filter((u) => u.id === user.id));
+    setUserSubordinateList(userSubordinateList.filter((u) => u.id !== user.id));
+  };
+
+  const getPossibleSubordinates = async (userRole: string) => {
+    const res = await getPossibleSubordinatesApi(userRole);
+
+    if (res) {
+      setPossibleSubordinates(res);
+      console.log(res);
+    }
   };
 
   useEffect(() => {
     getUsersFullname();
+  }, []);
+
+  useEffect(() => {
+    const select = selectRef.current;
+
+    const handleChange = (e: any) => {
+      getPossibleSubordinates(e.target.value);
+    };
+
+    if (select) {
+      // @ts-ignore
+      select.addEventListener("change", handleChange);
+    }
+
+    return () => {
+      if (select) {
+        // @ts-ignore
+        select.removeEventListener("change", handleChange);
+      }
+    };
   }, []);
 
   return (
@@ -64,7 +97,7 @@ const CreateUserForm = ({ onSubmit }: Props) => {
 
           <Field type="text" name="phone" placeholder="Phone:" />
 
-          <Field as="select" name="role" placeholder="Role:">
+          <Field as="select" name="role" placeholder="Role:" ref={selectRef}>
             <option disabled value="">
               Select
             </option>
@@ -80,9 +113,6 @@ const CreateUserForm = ({ onSubmit }: Props) => {
               </option>
             ))}
           </Field>
-
-          {/* TODO add subordinateList */}
-          {/* <Field type="text" name="phone" placeholder="Phone:" /> */}
 
           {errors.fullName && touched.fullName && (
             <div className="user-form__error">{errors.fullName}</div>
@@ -119,7 +149,7 @@ const CreateUserForm = ({ onSubmit }: Props) => {
               </div>
             )}
             Add users:
-            {usersFullname.map((user) => (
+            {possibleSubordinates.map((user) => (
               <div className="">
                 {user.fullName}: ({user.id})
                 <div className="" onClick={() => handleAddSubordinate(user)}>
@@ -129,7 +159,10 @@ const CreateUserForm = ({ onSubmit }: Props) => {
             ))}
           </div>
 
-          <Button onClick={() => onSubmit(values)} isActive={isValid && dirty}>
+          <Button
+            onClick={() => onSubmit(values, userSubordinateList)}
+            isActive={isValid && dirty}
+          >
             Add user
           </Button>
         </form>
