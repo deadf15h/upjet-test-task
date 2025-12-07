@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getUserApi } from "../../../api/api";
 import Button from "../../button/button";
 import ModalWindow from "../../modal-window/modal-window";
@@ -24,10 +24,6 @@ const SubordinateListCellRenderer = (props: any) => {
       setUserSubordinateList(res.subordinateList);
     }
   };
-
-  useEffect(() => {
-    console.log("userSubordinateList: ", userSubordinateList);
-  }, [userSubordinateList]);
 
   return (
     <div className="subordinate-list-cell-renderer">
