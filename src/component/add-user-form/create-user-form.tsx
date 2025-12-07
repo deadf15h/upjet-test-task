@@ -48,7 +48,6 @@ const CreateUserForm = ({ onSubmit }: Props) => {
 
     if (res) {
       setPossibleSubordinates(res);
-      console.log(res);
     }
   };
 

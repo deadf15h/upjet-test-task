@@ -21,8 +21,8 @@ const SubordinateListCellRenderer = (props: any) => {
   const getUser = async () => {
     const res = await getUserApi(props.data.id);
 
-    if (res && res[0].subordinateList) {
-      const subList = res![0].subordinateList.map((item: string) =>
+    if (res && res.subordinateList) {
+      const subList = res.subordinateList.map((item: string) =>
         JSON.parse(item)
       );
       setUserSubordinateList(subList);

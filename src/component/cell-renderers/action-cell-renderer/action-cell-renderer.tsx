@@ -43,11 +43,11 @@ const ActionCellRenderer = (props: any) => {
 
   return (
     <div className="action-cell-renderer">
-      <Button onClick={handleEditUserModalOpen}>Edit</Button>
-
       <Button onClick={handleDeleteUserModalOpen} color="red">
         Delete
       </Button>
+
+      <Button onClick={handleEditUserModalOpen}>Edit</Button>
 
       <ConfirmationModalWindow
         isOpen={isDeleteUserModalOpen}

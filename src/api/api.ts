@@ -17,7 +17,8 @@ export const getUserApi = async (userId: string) => {
   let { data, error } = await supabase
     .from("users")
     .select("subordinateList")
-    .eq("id", userId);
+    .eq("id", userId)
+    .single();
 
   if (data && !error) {
     console.log("getUserApi success");
@@ -31,18 +32,42 @@ export const createUserApi = async (
   newUser: TUser,
   subordinateList: TUser[]
 ) => {
-  const { data, error } = await supabase.from("users").insert([
-    {
-      fullName: newUser.fullName,
-      email: newUser.email,
-      phone: newUser.phone,
-      role: newUser.role,
-      chief: newUser.chief,
-      subordinateList: subordinateList,
-    },
-  ]);
+  const { data, error: createError } = await supabase
+    .from("users")
+    .insert([
+      {
+        fullName: newUser.fullName,
+        email: newUser.email,
+        phone: newUser.phone,
+        role: newUser.role,
+        chief: newUser.chief,
+        subordinateList: subordinateList,
+      },
+    ])
+    .select("id")
+    .single();
 
-  if (!error) {
+  const chiefUserSubordinateList = await getUserApi(newUser.chief!);
+
+  let updatedSubordinateList = [];
+
+  if (chiefUserSubordinateList?.subordinateList.length > 0) {
+    updatedSubordinateList = [
+      ...chiefUserSubordinateList?.subordinateList,
+      data?.id,
+    ];
+  } else {
+    updatedSubordinateList = [data?.id];
+  }
+
+  const { error: updateError } = await supabase
+    .from("users")
+    .update({
+      subordinateList: updatedSubordinateList,
+    })
+    .eq("id", newUser.chief);
+
+  if (!createError && !updateError) {
     console.log("createUserApi success");
     return data;
   }
@@ -51,6 +76,12 @@ export const createUserApi = async (
 };
 
 export const deleteUserApi = async (userId: string) => {
+  const res = await getUserApi(userId);
+
+  if (res && res.subordinateList.length > 0) {
+    return;
+  }
+
   const { data, error } = await supabase
     .from("users")
     .delete()
@@ -100,7 +131,6 @@ export const getPossibleSubordinatesApi = async (userRole: string) => {
         .or("role.eq.Manager,role.eq.User")
         .is("chief", null);
       break;
-    // .is("subordinateList", null);
 
     case EUserRole.manager:
       res = await supabase
