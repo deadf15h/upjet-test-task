@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getUserApi } from "../../../api/api";
-import { TUser } from "../../../const/types";
 import Button from "../../button/button";
 import ModalWindow from "../../modal-window/modal-window";
 import "./subordinate-list-cell-renderer.sass";
@@ -8,7 +7,7 @@ import "./subordinate-list-cell-renderer.sass";
 const SubordinateListCellRenderer = (props: any) => {
   const [isSubordinateListModalOpen, setSubordinateListModalOpen] =
     useState(false);
-  const [userSubordinateList, setUserSubordinateList] = useState<TUser[]>([]);
+  const [userSubordinateList, setUserSubordinateList] = useState<string[]>([]);
 
   const handleSubordinateListModalOpen = () => {
     setSubordinateListModalOpen(true);
@@ -21,13 +20,14 @@ const SubordinateListCellRenderer = (props: any) => {
   const getUser = async () => {
     const res = await getUserApi(props.data.id);
 
-    if (res && res.subordinateList) {
-      const subList = res.subordinateList.map((item: string) =>
-        JSON.parse(item)
-      );
-      setUserSubordinateList(subList);
+    if (res) {
+      setUserSubordinateList(res.subordinateList);
     }
   };
+
+  useEffect(() => {
+    console.log("userSubordinateList: ", userSubordinateList);
+  }, [userSubordinateList]);
 
   return (
     <div className="subordinate-list-cell-renderer">
@@ -48,9 +48,7 @@ const SubordinateListCellRenderer = (props: any) => {
         {userSubordinateList ? (
           <div className="">
             {userSubordinateList.map((sub) => (
-              <div className="" key={sub.id}>
-                {sub.fullName}
-              </div>
+              <div className="">{sub}</div>
             ))}
           </div>
         ) : (
