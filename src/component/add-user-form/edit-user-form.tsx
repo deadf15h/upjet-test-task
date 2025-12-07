@@ -64,8 +64,6 @@ const EditUserForm = ({ onSubmit, user }: Props) => {
             ))}
           </Field>
 
-          {/* TODO add subordinateList */}
-          {/* <Field type="text" name="phone" placeholder="Phone:" /> */}
           {errors.fullName && touched.fullName && (
             <div className="user-form__error">{errors.fullName}</div>
           )}

@@ -6,7 +6,6 @@ export const getUsersApi = async () => {
   let { data, error } = await supabase.from("users").select("*");
 
   if (data && !error) {
-    console.log("getUsersApi success");
     return data;
   }
 
@@ -21,7 +20,6 @@ export const getUserApi = async (userId: string) => {
     .single();
 
   if (data && !error) {
-    console.log("getUserApi success");
     return data;
   }
 
@@ -60,6 +58,7 @@ export const createUserApi = async (
     updatedSubordinateList = [data?.id];
   }
 
+  // TODO doesnt work always
   const { error: updateError } = await supabase
     .from("users")
     .update({
@@ -68,7 +67,6 @@ export const createUserApi = async (
     .eq("id", newUser.chief);
 
   if (!createError && !updateError) {
-    console.log("createUserApi success");
     return data;
   }
 
@@ -88,7 +86,6 @@ export const deleteUserApi = async (userId: string) => {
     .eq("id", userId);
 
   if (!error) {
-    console.log("deleteUserApi success");
     return data;
   }
 
@@ -99,7 +96,6 @@ export const getAllUsersFullnameApi = async () => {
   const { data, error } = await supabase.from("users").select("fullName, id");
 
   if (!error) {
-    console.log("getAllUsersFullnameApi success");
     return data;
   }
 
@@ -113,7 +109,6 @@ export const editUserApi = async (userId: string, newUserData: TUser) => {
     .eq("id", userId);
 
   if (!error) {
-    console.log("editUserApi success");
     return data;
   }
 
@@ -145,7 +140,6 @@ export const getPossibleSubordinatesApi = async (userRole: string) => {
   }
 
   if (!res?.error) {
-    console.log("getPossibleSubordinatesApi success");
     return res?.data;
   }
 
