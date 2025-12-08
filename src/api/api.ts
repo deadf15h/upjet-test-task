@@ -137,8 +137,13 @@ export const getPossibleSubordinatesApi = async (userRole: string) => {
         .is("chief", null);
       break;
 
+    // crutch
     case EUserRole.user:
-      return null;
+      res = await supabase
+        .from("users")
+        .select("*")
+        .eq("role", "User")
+        .neq("role", "User");
   }
 
   if (!res?.error) {

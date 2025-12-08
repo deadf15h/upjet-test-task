@@ -100,9 +100,9 @@ const CreateUserForm = ({ onSubmit }: Props) => {
             <option disabled value="">
               Select
             </option>
-            <option value={EUserRole.user}>User</option>
             <option value={EUserRole.admin}>Admin</option>
             <option value={EUserRole.manager}>Manager</option>
+            <option value={EUserRole.user}>User</option>
           </Field>
 
           <Field as="select" name="chief" placeholder="Chief:">
@@ -132,14 +132,13 @@ const CreateUserForm = ({ onSubmit }: Props) => {
             <div className="user-form__error">{errors.role}</div>
           )}
 
-          {/* TODO layout */}
           <div className="">
             Subordinate list:
             {userSubordinateList && (
               <div className="user-form__subordinate-list">
                 {userSubordinateList.map((user) => (
                   <div className="user-form__subordinate">
-                    {user.fullName}: ({user.id})
+                    {user.fullName} ({user.id})
                     <Button
                       color="red"
                       onClick={() => handleRemoveSubordinate(user)}
@@ -153,7 +152,7 @@ const CreateUserForm = ({ onSubmit }: Props) => {
             Add users:
             <div className="user-form__subordinate-list">
               {possibleSubordinates.map((user) => (
-                <div className="user-form__subordinate">
+                <div className="user-form__subordinate" key={user.id}>
                   {user.fullName}: ({user.id})
                   <Button onClick={() => handleAddSubordinate(user)}>+</Button>
                 </div>
