@@ -93,13 +93,14 @@ const Table = () => {
       filter: true,
       cellRenderer: SubordinateListCellRenderer,
     },
-    {
-      headerName: "Created at",
-      field: "createdAt",
-      sortable: true,
-      filter: true,
-      cellRenderer: TimeCellRenderer,
-    },
+    // TODO
+    // {
+    //   headerName: "Created at",
+    //   field: "createdAt",
+    //   sortable: true,
+    //   filter: true,
+    //   cellRenderer: TimeCellRenderer,
+    // },
     {
       headerName: "Actions",
       field: "",
