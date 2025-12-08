@@ -47,26 +47,28 @@ export const createUserApi = async (
 
   const chiefUserSubordinateList = await getUserApi(newUser.chief!);
 
-  let updatedSubordinateList = [];
+  // crutch
+  setTimeout(async () => {
+    let updatedSubordinateList = [];
 
-  if (chiefUserSubordinateList?.subordinateList.length > 0) {
-    updatedSubordinateList = [
-      ...chiefUserSubordinateList?.subordinateList,
-      data?.id,
-    ];
-  } else {
-    updatedSubordinateList = [data?.id];
-  }
+    if (chiefUserSubordinateList?.subordinateList.length > 0) {
+      updatedSubordinateList = [
+        ...chiefUserSubordinateList?.subordinateList,
+        data?.id,
+      ];
+    } else {
+      updatedSubordinateList = [data?.id];
+    }
 
-  // TODO doesnt work always
-  const { error: updateError } = await supabase
-    .from("users")
-    .update({
-      subordinateList: updatedSubordinateList,
-    })
-    .eq("id", newUser.chief);
+    const { error: updateError } = await supabase
+      .from("users")
+      .update({
+        subordinateList: updatedSubordinateList,
+      })
+      .eq("id", newUser.chief);
+  }, 500);
 
-  if (!createError && !updateError) {
+  if (!createError) {
     return data;
   }
 

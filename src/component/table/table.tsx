@@ -8,7 +8,7 @@ import { AgGridReact } from "ag-grid-react";
 import { createContext, useEffect, useState } from "react";
 import { gridOptions } from "../../const/const";
 import { TUser } from "../../const/types";
-import CreateUserForm from "../add-user-form/create-user-form";
+import CreateUserForm from "../user-form/create-user-form";
 import Button from "../button/button";
 import ModalWindow from "../modal-window/modal-window";
 import { createUserApi, getUsersApi } from "../../api/api";

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { deleteUserApi, editUserApi } from "../../../api/api";
 import { TUser } from "../../../const/types";
-import EditUserForm from "../../add-user-form/edit-user-form";
+import EditUserForm from "../../user-form/edit-user-form";
 import Button from "../../button/button";
 import ConfirmationModalWindow from "../../confirmation-modal-window/confirmation-modal-window";
 import ModalWindow from "../../modal-window/modal-window";
