@@ -106,6 +106,9 @@ const CreateUserForm = ({ onSubmit }: Props) => {
           </Field>
 
           <Field as="select" name="chief" placeholder="Chief:">
+            <option disabled value="">
+              Empty
+            </option>
             {usersFullname.map((user) => (
               <option value={user.id} key={user.id}>
                 {user.fullName}
@@ -133,29 +136,29 @@ const CreateUserForm = ({ onSubmit }: Props) => {
           <div className="">
             Subordinate list:
             {userSubordinateList && (
-              <div className="">
+              <div className="user-form__subordinate-list">
                 {userSubordinateList.map((user) => (
-                  <div className="">
+                  <div className="user-form__subordinate">
                     {user.fullName}: ({user.id})
-                    <div
-                      className=""
+                    <Button
+                      color="red"
                       onClick={() => handleRemoveSubordinate(user)}
                     >
                       -
-                    </div>
+                    </Button>
                   </div>
                 ))}
               </div>
             )}
             Add users:
-            {possibleSubordinates.map((user) => (
-              <div className="">
-                {user.fullName}: ({user.id})
-                <div className="" onClick={() => handleAddSubordinate(user)}>
-                  +
+            <div className="user-form__subordinate-list">
+              {possibleSubordinates.map((user) => (
+                <div className="user-form__subordinate">
+                  {user.fullName}: ({user.id})
+                  <Button onClick={() => handleAddSubordinate(user)}>+</Button>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
 
           <Button
