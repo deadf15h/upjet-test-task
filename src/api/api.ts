@@ -38,7 +38,7 @@ export const createUserApi = async (
         email: newUser.email,
         phone: newUser.phone,
         role: newUser.role,
-        chief: newUser.chief,
+        chief: newUser.chief ? newUser.chief : null,
         subordinateList: subordinateList,
       },
     ])
