@@ -68,6 +68,18 @@ export const createUserApi = async (
       .eq("id", newUser.chief);
   }, 500);
 
+  // crutch
+  setTimeout(async () => {
+    for (const subordinate of subordinateList) {
+      const { error: updateSubordinateError } = await supabase
+        .from("users")
+        .update({
+          chief: data!.id,
+        })
+        .eq("id", subordinate.id);
+    }
+  }, 1500);
+
   if (!createError) {
     return data;
   }

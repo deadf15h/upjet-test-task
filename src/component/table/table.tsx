@@ -13,9 +13,8 @@ import Button from "../button/button";
 import ModalWindow from "../modal-window/modal-window";
 import { createUserApi, getUsersApi } from "../../api/api";
 import ActionCellRenderer from "../cell-renderers/action-cell-renderer/action-cell-renderer";
-import "./table.sass";
-import TimeCellRenderer from "../cell-renderers/time-cell-renderer/time-cell-renderer";
 import SubordinateListCellRenderer from "../cell-renderers/subordinate-list-cell-renderer/subordinate-list-cell-renderer";
+import "./table.sass";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -46,7 +45,10 @@ const Table = () => {
 
     handleAddUserModalClose();
 
-    getUsers();
+    // crutch
+    setTimeout(() => {
+      getUsers();
+    }, 1000);
   };
 
   const columnsData = [

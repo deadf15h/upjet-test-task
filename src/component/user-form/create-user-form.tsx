@@ -137,7 +137,7 @@ const CreateUserForm = ({ onSubmit }: Props) => {
             {userSubordinateList && (
               <div className="user-form__subordinate-list">
                 {userSubordinateList.map((user) => (
-                  <div className="user-form__subordinate">
+                  <div className="user-form__subordinate" key={user.id}>
                     {user.fullName} ({user.id})
                     <Button
                       color="red"
